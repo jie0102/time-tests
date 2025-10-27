@@ -1,4 +1,5 @@
 import times  
+import pytest
 def test_given_input():
     """The content in expected cell is directly copied from the result 
     of times.py. The purpose of this function is test whether the results
@@ -70,3 +71,18 @@ def test_touching_intervals_no_overlap():
 
     # there is no positive-length overlap. We expect [].
     assert result == []
+
+def test_time_range_backwards_raises():
+    """Check that a backwards time range raises a ValueError"""
+    with pytest.raises(ValueError):
+        times.time_range("2010-01-12 12:00:00", "2010-01-12 10:00:00")
+
+
+import pytest
+from times import time_range
+
+def test_time_in_order():
+    start_time = "2010-01-12 10:00:00"
+    end_time = "2010-01-12 09:00:00"
+    with pytest.raises(ValueError, match="start time should be before end"):
+        time_range(start_time, end_time)
